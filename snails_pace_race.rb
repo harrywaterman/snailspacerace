@@ -1,3 +1,34 @@
+class String
+  def colorize(color_code)
+    "\e[#{color_code}m#{self}\e[0m"
+  end
+
+  def red
+    colorize(31)
+  end
+
+  def green
+    colorize(32)
+  end
+
+  def yellow
+    colorize(93)
+  end
+
+  def pink
+    colorize(35)
+  end
+
+  def orange
+    colorize(33)
+  end
+
+  def blue
+    colorize(34)
+  end
+
+end
+
 class SnailsPaceRace
 
   FINISH_LINE = 10
@@ -18,12 +49,14 @@ class SnailsPaceRace
   end
 
   def show_race
+    puts "\e[H\e[2J"
     @player_position.each_key do |k|
-      puts "-" * 75
+      puts "-" * 85
       formatted_player_name = sprintf("%6s", k)
-      print "#{formatted_player_name}\t\t"
-      print " X--X " * @player_position[k]
-      print "|\n"
+      print "#{formatted_player_name}\t\t".send(k)
+      print "       " * ( @player_position[k] - 1) if @player_position[k] > 0
+      print " oOOo/ ".send(k)
+      print "\n"
     end
   end
 
@@ -35,10 +68,16 @@ class SnailsPaceRace
     end
     return false
     end
+
+  def print_all_colors
+    (1..200).each do |i|
+      puts "Color #{i}".colorize(i)
+    end
+  end
 end
 
 game = SnailsPaceRace.new
-
+# game.print_all_colors
 while not game.game_over? do
   print "Hit enter to roll"
   gets
